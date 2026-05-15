@@ -168,7 +168,7 @@ export default function CartModal({
                         onPress={() =>
                           dispatch(
                             removeItem(
-                              cartItem.item.id
+                              {itemId: cartItem.item.id, quantity: 1}
                             )
                           )
                         }
@@ -187,7 +187,7 @@ export default function CartModal({
                         onPress={() =>
                           dispatch(
                             addItem(
-                              cartItem.item
+                              {item: cartItem.item, quantity: 1}
                             )
                           )
                         }

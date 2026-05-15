@@ -1,106 +1,168 @@
+import React, { useRef, useEffect } from "react";
+
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
+  Keyboard
 } from "react-native";
 
-import { COLORS } from "@/constants/colors";
+import { ChatMessage } from "@/api/types/chat";
 
-export default function ConversationList() {
+interface Props {
+  messages: ChatMessage[];
+  loading: boolean;
+}
+
+export default function ConversationList({
+  messages,
+  loading,
+}: Props) {
+
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      scrollViewRef.current
+        ?.scrollToEnd({
+          animated: true,
+        });
+    }, 100);
+  }, [messages, loading]);
+
+  useEffect(() => {
+    const keyboardListener =
+      Keyboard.addListener(
+        "keyboardDidShow",
+        () => {
+          setTimeout(() => {
+            scrollViewRef.current
+              ?.scrollToEnd({
+                animated: true,
+              });
+          }, 100);
+        }
+      );
+
+    return () => {
+      keyboardListener.remove();
+    };
+  }, []);
+
   return (
     <ScrollView
-      contentContainerStyle={styles.container}
+      ref={scrollViewRef}
+      style={styles.container}
+      contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      <View style={styles.aiMessage}>
-        <Text style={styles.aiText}>
-          Welcome to Intelligent Bistro.
-          What would you like today?
-        </Text>
-      </View>
-
-      <View style={styles.userMessage}>
-        <Text style={styles.userText}>
-          Add two spicy burgers.
-        </Text>
-      </View>
-
-      <View style={styles.aiMessage}>
-        <Text style={styles.aiText}>
-          Added 2 spicy burgers to your cart.
-        </Text>
-      </View>
-
-      <View style={styles.loadingContainer}>
-        <View style={styles.dot} />
-        <View style={styles.dot} />
-        <View style={styles.dot} />
-      </View>
+      {messages.map((message) => (
+        <View
+          key={message.id}
+          style={[
+            styles.messageWrapper,
+            message.role === "user"
+              ? styles.userWrapper
+              : styles.assistantWrapper,
+          ]}
+        >
+          <View
+            style={[
+              styles.bubble,
+              message.role === "user"
+                ? styles.userBubble
+                : styles.assistantBubble,
+            ]}
+          >
+            <Text
+              style={[
+                styles.messageText,
+                message.role === "user"
+                  ? styles.userText
+                  : styles.assistantText,
+              ]}
+            >
+              {message.content}
+            </Text>
+          </View>
+        </View>
+      ))}
+      {loading && (
+        <View
+          style={styles.assistantWrapper}
+        >
+          <View
+            style={[
+              styles.bubble,
+              styles.assistantBubble,
+            ]}
+          >
+            <Text style={styles.typing}>
+              ...
+            </Text>
+          </View>
+        </View>
+      )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
-    paddingBottom: 120,
-    gap: 16,
+    flex: 1,
   },
 
-  aiMessage: {
-    alignSelf: "flex-start",
-
-    maxWidth: "80%",
-
-    padding: 16,
-
-    borderRadius: 24,
-
-    backgroundColor: COLORS.glass,
-
-    borderWidth: 1,
-    borderColor: COLORS.border,
+  content: {
+    padding: 20,
+    paddingBottom: 140,
+    gap: 18,
   },
 
-  aiText: {
-    color: COLORS.primaryText,
-    fontSize: 16,
-    lineHeight: 24,
+  messageWrapper: {
+    width: "100%",
   },
 
-  userMessage: {
-    alignSelf: "flex-end",
+  assistantWrapper: {
+    alignItems: "flex-start",
+  },
 
-    maxWidth: "80%",
+  userWrapper: {
+    alignItems: "flex-end",
+  },
 
-    padding: 16,
+  bubble: {
+    maxWidth: "78%",
+    borderRadius: 28,
+    paddingHorizontal: 18,
+    paddingVertical: 16,
+  },
 
-    borderRadius: 24,
+  assistantBubble: {
+    backgroundColor:
+      "rgba(255,255,255,0.45)",
+  },
 
-    backgroundColor: COLORS.accent,
+  userBubble: {
+    backgroundColor: "#ff8c1a",
+  },
+
+  messageText: {
+    fontSize: 18,
+    lineHeight: 28,
+  },
+
+  assistantText: {
+    color: "#1a1a1a",
   },
 
   userText: {
-    color: "#fff",
-    fontSize: 16,
-    lineHeight: 24,
+    color: "#ffffff",
   },
 
-  loadingContainer: {
-    flexDirection: "row",
-    gap: 8,
-
-    paddingLeft: 12,
-    marginTop: 4,
+  typing: {
+    fontSize: 28,
+    color: "#666",
+    letterSpacing: 4,
   },
-
-  dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-
-    backgroundColor: COLORS.secondaryText,
-  },
-
 });

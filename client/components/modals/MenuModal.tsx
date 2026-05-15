@@ -152,7 +152,7 @@ export default function MenuModal({
 
                       <TouchableOpacity
                         style={styles.addButton}
-                        onPress={() => dispatch(addItem(item))}
+                        onPress={() => dispatch(addItem({item, quantity: 1}))}
                       >
                         <Text style={styles.addButtonText}>
                           Add
@@ -165,7 +165,7 @@ export default function MenuModal({
 
                         <TouchableOpacity
                           style={styles.quantityButton}
-                          onPress={() => dispatch(removeItem(item.id))}
+                          onPress={() => dispatch(removeItem({itemId: item.id, quantity: 1}))}
                         >
                           <Text style={styles.quantityButtonText}>
                             −
@@ -178,7 +178,7 @@ export default function MenuModal({
 
                         <TouchableOpacity
                           style={styles.quantityButton}
-                          onPress={() => dispatch(addItem(item))}
+                          onPress={() => dispatch(addItem({item, quantity: 1}))}
                         >
                           <Text style={styles.quantityButtonText}>
                             +
