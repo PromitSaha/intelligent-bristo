@@ -1,4 +1,6 @@
 import React, { useRef } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { BlurView } from "expo-blur";
 
 import {
   Modal,
@@ -11,13 +13,11 @@ import {
   Dimensions,
 } from "react-native";
 
-import { BlurView } from "expo-blur";
 
 import { COLORS } from "@/constants/colors";
-
-import {
-  useMenuApi,
-} from "@/api/hooks/useMenuApi";
+import { useMenuApi } from "@/api/hooks/useMenuApi";
+import { RootState } from "@/store/store";
+import { addItem, removeItem } from "@/store/slices/cartSlice";
 
 interface Props {
   visible: boolean;
@@ -42,12 +42,23 @@ export default function MenuModal({
       new Animated.Value(-screenWidth)
     ).current;
 
+  const dispatch = useDispatch();
+  const cartItems = useSelector(
+    (state: RootState) => state.cart.items
+  );
+
+  const getItemQuantity = (itemId: string) => {
+    const cartItem = cartItems.find(
+      (item) => item.item.id === itemId
+    );
+
+    return cartItem ? cartItem.quantity : 0;
+  };
+
+  // UseEffects Start Here
   React.useEffect(() => {
-
     if (visible) {
-
       slideAnim.setValue(-screenWidth);
-
       Animated.spring(slideAnim, {
         toValue: 0,
 
@@ -56,7 +67,6 @@ export default function MenuModal({
 
         useNativeDriver: true,
       }).start();
-
     } else {
 
       Animated.timing(slideAnim, {
@@ -74,6 +84,7 @@ export default function MenuModal({
       getMenu();
     }
   }, [visible]);
+  // UseEffects end Here
 
   return (
     <Modal
@@ -112,7 +123,6 @@ export default function MenuModal({
               showsVerticalScrollIndicator={false}
             >
               {menu.map((item) => (
-
                 <View
                   key={item.id}
                   style={styles.itemCard}
@@ -133,9 +143,51 @@ export default function MenuModal({
                     ⏱ {item.preparationTime}
                   </Text>
 
-                  <Text style={styles.itemPrice}>
-                    ${item.price.toFixed(2)}
-                  </Text>
+                  <View style={styles.bottomRow}>
+                    <Text style={styles.itemPrice}>
+                      ${item.price.toFixed(2)}
+                    </Text>
+
+                    {getItemQuantity(item.id) === 0 ? (
+
+                      <TouchableOpacity
+                        style={styles.addButton}
+                        onPress={() => dispatch(addItem(item))}
+                      >
+                        <Text style={styles.addButtonText}>
+                          Add
+                        </Text>
+                      </TouchableOpacity>
+
+                    ) : (
+
+                      <View style={styles.quantityContainer}>
+
+                        <TouchableOpacity
+                          style={styles.quantityButton}
+                          onPress={() => dispatch(removeItem(item.id))}
+                        >
+                          <Text style={styles.quantityButtonText}>
+                            −
+                          </Text>
+                        </TouchableOpacity>
+
+                        <Text style={styles.quantityText}>
+                          {getItemQuantity(item.id)}
+                        </Text>
+
+                        <TouchableOpacity
+                          style={styles.quantityButton}
+                          onPress={() => dispatch(addItem(item))}
+                        >
+                          <Text style={styles.quantityButtonText}>
+                            +
+                          </Text>
+                        </TouchableOpacity>
+
+                      </View>
+                    )}
+                    </View>
                 </View>
               ))}
             </ScrollView>
@@ -162,8 +214,7 @@ const styles = StyleSheet.create({
 
     padding: 20,
 
-    borderTopRightRadius: 32,
-    borderBottomRightRadius: 32,
+    borderRadius: 32,
 
     overflow: "hidden",
 
@@ -287,5 +338,76 @@ const styles = StyleSheet.create({
     fontWeight: "700",
 
     color: COLORS.accent,
+  },
+
+  bottomRow: {
+    marginTop: 20,
+
+    flexDirection: "row",
+
+    justifyContent: "space-between",
+
+    alignItems: "center",
+  },
+
+  quantityContainer: {
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    gap: 12,
+  },
+
+  quantityButton: {
+    width: 36,
+    height: 36,
+
+    borderRadius: 18,
+
+    backgroundColor: "rgba(255,255,255,0.2)",
+
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  quantityButtonText: {
+    fontSize: 22,
+
+    fontWeight: "600",
+
+    color: COLORS.primaryText,
+  },
+
+  quantityText: {
+    fontSize: 18,
+
+    fontWeight: "600",
+
+    color: COLORS.primaryText,
+
+    minWidth: 24,
+
+    textAlign: "center",
+  },
+
+  addButton: {
+    backgroundColor: "rgba(255,255,255,0.35)",
+
+    paddingHorizontal: 18,
+
+    paddingVertical: 10,
+
+    borderRadius: 20,
+
+    justifyContent: "center",
+
+    alignItems: "center",
+  },
+
+  addButtonText: {
+    color: COLORS.primaryText,
+    fontSize: 16,
+
+    fontWeight: "600",
   },
 });

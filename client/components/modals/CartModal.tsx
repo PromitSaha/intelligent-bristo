@@ -8,10 +8,18 @@ import {
   TouchableOpacity,
   Animated,
   Dimensions,
+  ScrollView,
 } from "react-native";
 
 import { BlurView } from "expo-blur";
 
+import {
+  useDispatch,
+  useSelector,
+} from "react-redux";
+
+import { RootState } from "@/store/store";
+import { addItem, removeItem } from "@/store/slices/cartSlice";
 import { COLORS } from "@/constants/colors";
 
 interface Props {
@@ -32,10 +40,26 @@ export default function CartModal({
       new Animated.Value(screenWidth)
     ).current;
 
+  const dispatch = useDispatch();
+
+  const cartItems = useSelector(
+    (state: RootState) => state.cart.items
+  );
+
+  const totalPrice = cartItems.reduce(
+    (total, cartItem) => {
+      return (
+        total +
+        cartItem.item.price *
+        cartItem.quantity
+      );
+    },
+    0
+  );
+
+  // useEffect Start Here
   React.useEffect(() => {
-
     if (visible) {
-
       slideAnim.setValue(screenWidth);
 
       Animated.spring(slideAnim, {
@@ -57,8 +81,8 @@ export default function CartModal({
         useNativeDriver: true,
       }).start();
     }
-
   }, [visible]);
+  // UseEffect End Here
 
   return (
     <Modal
@@ -67,7 +91,6 @@ export default function CartModal({
       animationType="none"
     >
       <View style={styles.overlay}>
-
         <Animated.View
           style={{
             transform: [
@@ -85,21 +108,122 @@ export default function CartModal({
                 Cart
               </Text>
 
-              <TouchableOpacity onPress={onClose}>
-                <Text style={styles.close}>
+              <TouchableOpacity
+                onPress={onClose}
+                style={styles.closeButton}
+              >
+                <Text style={styles.closeText}>
                   ✕
                 </Text>
               </TouchableOpacity>
             </View>
 
-            <View style={styles.cartCard}>
-              <Text style={styles.itemText}>
-                2x Spicy Burger
-              </Text>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingBottom: 140,
+              }}
+            >
 
-              <Text style={styles.price}>
-                $24.99
-              </Text>
+              {cartItems.length === 0 ? (
+
+                <View style={styles.emptyContainer}>
+
+                  <Text style={styles.emptyText}>
+                    Your cart is empty
+                  </Text>
+
+                </View>
+
+              ) : (
+
+                cartItems.map((cartItem) => (
+
+                  <View
+                    key={cartItem.item.id}
+                    style={styles.cartCard}
+                  >
+
+                    <View style={styles.itemTopRow}>
+
+                      <Text style={styles.itemName}>
+                        {cartItem.quantity}x{" "}
+                        {cartItem.item.name}
+                      </Text>
+
+                    </View>
+
+                    <Text style={styles.itemPrice}>
+                      $
+                      {(
+                        cartItem.item.price *
+                        cartItem.quantity
+                      ).toFixed(2)}
+                    </Text>
+
+                    <View style={styles.quantityContainer}>
+
+                      <TouchableOpacity
+                        style={styles.quantityButton}
+                        onPress={() =>
+                          dispatch(
+                            removeItem(
+                              cartItem.item.id
+                            )
+                          )
+                        }
+                      >
+                        <Text style={styles.quantityButtonText}>
+                          −
+                        </Text>
+                      </TouchableOpacity>
+
+                      <Text style={styles.quantityText}>
+                        {cartItem.quantity}
+                      </Text>
+
+                      <TouchableOpacity
+                        style={styles.quantityButton}
+                        onPress={() =>
+                          dispatch(
+                            addItem(
+                              cartItem.item
+                            )
+                          )
+                        }
+                      >
+                        <Text style={styles.quantityButtonText}>
+                          +
+                        </Text>
+                      </TouchableOpacity>
+
+                    </View>
+
+                  </View>
+
+                ))
+
+              )}
+            </ScrollView>
+
+            <View style={styles.footer}>
+              <View>
+                <Text style={styles.totalLabel}>
+                  Total
+                </Text>
+
+                <Text style={styles.totalPrice}>
+                  ${totalPrice.toFixed(2)}
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                style={styles.orderButton}
+              >
+                <Text style={styles.orderButtonText}>
+                  Place Order
+                </Text>
+              </TouchableOpacity>
             </View>
           </BlurView>
         </Animated.View>
@@ -114,18 +238,17 @@ const styles = StyleSheet.create({
 
     backgroundColor: "rgba(0,0,0,0.12)",
 
-    justifyContent: "center",
-    alignItems: "flex-end",
+    justifyContent: "flex-start",
+    paddingTop: 65,
   },
 
   modal: {
-    width: "80%",
-    height: "90%",
-
+    width: "75%",
+    height: "93%",
+    marginLeft: "auto",
     padding: 20,
 
-    borderTopLeftRadius: 32,
-    borderBottomLeftRadius: 32,
+    borderRadius: 32,
 
     overflow: "hidden",
 
@@ -147,6 +270,8 @@ const styles = StyleSheet.create({
     shadowRadius: 24,
 
     elevation: 20,
+
+    paddingBottom: 140,
   },
 
   header: {
@@ -157,6 +282,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
 
     marginBottom: 24,
+  },
+
+  closeButton: {
+    position: "absolute",
+
+    right: 0,
+
+    width: 48,
+    height: 48,
+
+    borderRadius: 24,
+
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  closeText: {
+    fontSize: 28,
+
+    color: COLORS.primaryText,
   },
 
   title: {
@@ -173,18 +318,6 @@ const styles = StyleSheet.create({
     color: COLORS.primaryText,
   },
 
-  cartCard: {
-    padding: 18,
-
-    borderRadius: 20,
-
-    backgroundColor: "rgba(255,255,255,0.18)",
-
-    borderWidth: 1,
-
-    borderColor: "rgba(255,255,255,0.2)",
-  },
-
   itemText: {
     fontSize: 18,
 
@@ -197,5 +330,157 @@ const styles = StyleSheet.create({
     fontSize: 16,
 
     color: COLORS.secondaryText,
+  },
+
+  emptyContainer: {
+    flex: 1,
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    marginTop: 120,
+  },
+
+  emptyText: {
+    fontSize: 18,
+
+    color: COLORS.secondaryText,
+  },
+
+  cartCard: {
+    backgroundColor: "rgba(255,255,255,0.18)",
+
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.25)",
+
+    borderRadius: 24,
+
+    padding: 18,
+
+    marginBottom: 16,
+  },
+
+  itemTopRow: {
+    flexDirection: "row",
+
+    justifyContent: "space-between",
+
+    alignItems: "center",
+  },
+
+  itemName: {
+    fontSize: 18,
+
+    fontWeight: "600",
+
+    color: COLORS.primaryText,
+
+    flex: 1,
+  },
+
+  itemPrice: {
+    marginTop: 12,
+
+    fontSize: 18,
+
+    fontWeight: "700",
+
+    color: COLORS.accent,
+  },
+
+  quantityContainer: {
+    marginTop: 18,
+
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    gap: 12,
+  },
+
+  quantityButton: {
+    width: 36,
+    height: 36,
+
+    borderRadius: 18,
+
+    backgroundColor: "rgba(255,255,255,0.35)",
+
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  quantityButtonText: {
+    fontSize: 22,
+
+    fontWeight: "600",
+
+    color: COLORS.primaryText,
+  },
+
+  quantityText: {
+    fontSize: 18,
+
+    fontWeight: "600",
+
+    color: COLORS.primaryText,
+
+    minWidth: 24,
+
+    textAlign: "center",
+  },
+
+  footer: {
+    position: "absolute",
+
+    left: 20,
+    right: 20,
+    bottom: 24,
+
+    flexDirection: "row",
+
+    justifyContent: "space-between",
+
+    alignItems: "center",
+
+    backgroundColor: "rgba(255,255,255,0.35)",
+
+    borderRadius: 24,
+
+    padding: 18,
+  },  
+
+  totalLabel: {
+    fontSize: 14,
+
+    color: COLORS.secondaryText,
+  },
+
+  totalPrice: {
+    marginTop: 4,
+
+    fontSize: 24,
+
+    fontWeight: "700",
+
+    color: COLORS.primaryText,
+  },
+
+  orderButton: {
+    backgroundColor: COLORS.accent,
+
+    paddingHorizontal: 24,
+
+    paddingVertical: 14,
+
+    borderRadius: 20,
+  },
+
+  orderButtonText: {
+    color: "#fff",
+
+    fontSize: 16,
+
+    fontWeight: "600",
   },
 });
