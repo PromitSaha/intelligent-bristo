@@ -1,0 +1,272 @@
+[
+  {
+    "id": 1,
+    "name": "Bruschetta",
+    "shortDetails": "Toasted bread topped with tomato basil mixture.",
+    "ingredients": ["Bread", "Tomato", "Basil", "Garlic"],
+    "spiceLevel": "Mild",
+    "preparationTime": "10 mins",
+    "price": 9.99,
+    "category": "Appetizers"
+  },
+  {
+    "id": 2,
+    "name": "Garlic Bread",
+    "shortDetails": "Crispy baked bread with garlic butter.",
+    "ingredients": ["Bread", "Garlic", "Butter", "Parsley"],
+    "spiceLevel": "Mild",
+    "preparationTime": "8 mins",
+    "price": 7.99,
+    "category": "Appetizers"
+  },
+  {
+    "id": 3,
+    "name": "Caprese Salad",
+    "shortDetails": "Fresh mozzarella, tomato, and basil salad.",
+    "ingredients": ["Mozzarella", "Tomato", "Basil", "Olive Oil"],
+    "spiceLevel": "Mild",
+    "preparationTime": "7 mins",
+    "price": 11.99,
+    "category": "Appetizers"
+  },
+  {
+    "id": 4,
+    "name": "Stuffed Mushrooms",
+    "shortDetails": "Mushrooms stuffed with cheese and herbs.",
+    "ingredients": ["Mushrooms", "Cheese", "Parsley", "Garlic"],
+    "spiceLevel": "Medium",
+    "preparationTime": "14 mins",
+    "price": 12.99,
+    "category": "Appetizers"
+  },
+  {
+    "id": 5,
+    "name": "Margherita Pizza",
+    "shortDetails": "Classic Neapolitan pizza with mozzarella and basil.",
+    "ingredients": ["Tomato Sauce", "Mozzarella", "Basil", "Olive Oil"],
+    "spiceLevel": "Mild",
+    "preparationTime": "15 mins",
+    "price": 14.99,
+    "category": "Pizza"
+  },
+  {
+    "id": 6,
+    "name": "Pepperoni Pizza",
+    "shortDetails": "Traditional pepperoni pizza with mozzarella.",
+    "ingredients": ["Pepperoni", "Mozzarella", "Tomato Sauce"],
+    "spiceLevel": "Medium",
+    "preparationTime": "16 mins",
+    "price": 17.99,
+    "category": "Pizza"
+  },
+  {
+    "id": 7,
+    "name": "Quattro Formaggi",
+    "shortDetails": "Four-cheese Italian white pizza.",
+    "ingredients": ["Mozzarella", "Parmesan", "Gorgonzola", "Ricotta"],
+    "spiceLevel": "Mild",
+    "preparationTime": "18 mins",
+    "price": 18.99,
+    "category": "Pizza"
+  },
+  {
+    "id": 8,
+    "name": "Diavola Pizza",
+    "shortDetails": "Spicy Italian salami pizza.",
+    "ingredients": ["Salami", "Mozzarella", "Chili Oil"],
+    "spiceLevel": "Hot",
+    "preparationTime": "17 mins",
+    "price": 19.99,
+    "category": "Pizza"
+  },
+  {
+    "id": 9,
+    "name": "Truffle Pizza",
+    "shortDetails": "Creamy truffle pizza with mushrooms.",
+    "ingredients": ["Truffle Oil", "Mushrooms", "Mozzarella"],
+    "spiceLevel": "Mild",
+    "preparationTime": "20 mins",
+    "price": 22.99,
+    "category": "Pizza"
+  },
+  {
+    "id": 10,
+    "name": "Chicken Alfredo",
+    "shortDetails": "Creamy Alfredo pasta topped with grilled chicken.",
+    "ingredients": ["Fettuccine", "Chicken", "Cream", "Parmesan"],
+    "spiceLevel": "Medium",
+    "preparationTime": "20 mins",
+    "price": 19.99,
+    "category": "Pasta"
+  },
+  {
+    "id": 11,
+    "name": "Spicy Arrabbiata Pasta",
+    "shortDetails": "Penne pasta tossed in spicy garlic tomato sauce.",
+    "ingredients": ["Penne", "Garlic", "Tomato", "Chili Flakes"],
+    "spiceLevel": "Hot",
+    "preparationTime": "18 mins",
+    "price": 16.5,
+    "category": "Pasta"
+  },
+  {
+    "id": 12,
+    "name": "Carbonara",
+    "shortDetails": "Classic Roman pasta with pancetta and parmesan.",
+    "ingredients": ["Spaghetti", "Pancetta", "Egg", "Parmesan"],
+    "spiceLevel": "Mild",
+    "preparationTime": "17 mins",
+    "price": 18.99,
+    "category": "Pasta"
+  },
+  {
+    "id": 13,
+    "name": "Pesto Linguine",
+    "shortDetails": "Fresh basil pesto tossed with linguine.",
+    "ingredients": ["Linguine", "Basil", "Parmesan", "Pine Nuts"],
+    "spiceLevel": "Mild",
+    "preparationTime": "15 mins",
+    "price": 17.99,
+    "category": "Pasta"
+  },
+  {
+    "id": 14,
+    "name": "Lasagna",
+    "shortDetails": "Layered pasta baked with beef and cheese.",
+    "ingredients": ["Pasta Sheets", "Beef", "Mozzarella", "Tomato Sauce"],
+    "spiceLevel": "Medium",
+    "preparationTime": "25 mins",
+    "price": 21.99,
+    "category": "Pasta"
+  },
+  {
+    "id": 15,
+    "name": "Seafood Pasta",
+    "shortDetails": "Mixed seafood pasta in garlic white wine sauce.",
+    "ingredients": ["Shrimp", "Mussels", "Garlic", "White Wine"],
+    "spiceLevel": "Medium",
+    "preparationTime": "22 mins",
+    "price": 24.99,
+    "category": "Pasta"
+  },
+  {
+    "id": 16,
+    "name": "Mushroom Risotto",
+    "shortDetails": "Creamy risotto with wild mushrooms.",
+    "ingredients": ["Arborio Rice", "Mushrooms", "Parmesan"],
+    "spiceLevel": "Mild",
+    "preparationTime": "24 mins",
+    "price": 20.99,
+    "category": "Risotto"
+  },
+  {
+    "id": 17,
+    "name": "Saffron Risotto",
+    "shortDetails": "Classic saffron-infused risotto.",
+    "ingredients": ["Arborio Rice", "Saffron", "Parmesan"],
+    "spiceLevel": "Mild",
+    "preparationTime": "23 mins",
+    "price": 21.99,
+    "category": "Risotto"
+  },
+  {
+    "id": 18,
+    "name": "Shrimp Risotto",
+    "shortDetails": "Creamy risotto topped with grilled shrimp.",
+    "ingredients": ["Shrimp", "Arborio Rice", "Garlic", "Parmesan"],
+    "spiceLevel": "Medium",
+    "preparationTime": "25 mins",
+    "price": 23.99,
+    "category": "Risotto"
+  },
+  {
+    "id": 19,
+    "name": "Tiramisu",
+    "shortDetails": "Classic Italian coffee-flavored layered dessert.",
+    "ingredients": ["Mascarpone", "Espresso", "Ladyfingers", "Cocoa"],
+    "spiceLevel": "Mild",
+    "preparationTime": "8 mins",
+    "price": 8.99,
+    "category": "Desserts"
+  },
+  {
+    "id": 20,
+    "name": "Cannoli",
+    "shortDetails": "Crispy pastry shells filled with sweet ricotta.",
+    "ingredients": ["Ricotta", "Pastry Shell", "Chocolate Chips"],
+    "spiceLevel": "Mild",
+    "preparationTime": "10 mins",
+    "price": 7.99,
+    "category": "Desserts"
+  },
+  {
+    "id": 21,
+    "name": "Panna Cotta",
+    "shortDetails": "Creamy Italian vanilla dessert.",
+    "ingredients": ["Cream", "Vanilla", "Gelatin"],
+    "spiceLevel": "Mild",
+    "preparationTime": "9 mins",
+    "price": 8.5,
+    "category": "Desserts"
+  },
+  {
+    "id": 22,
+    "name": "Gelato",
+    "shortDetails": "Authentic Italian-style ice cream.",
+    "ingredients": ["Milk", "Sugar", "Vanilla"],
+    "spiceLevel": "Mild",
+    "preparationTime": "5 mins",
+    "price": 6.99,
+    "category": "Desserts"
+  },
+  {
+    "id": 23,
+    "name": "Espresso",
+    "shortDetails": "Rich and bold Italian espresso shot.",
+    "ingredients": ["Coffee Beans", "Water"],
+    "spiceLevel": "Mild",
+    "preparationTime": "3 mins",
+    "price": 3.99,
+    "category": "Drinks"
+  },
+  {
+    "id": 24,
+    "name": "Cappuccino",
+    "shortDetails": "Espresso with steamed milk foam.",
+    "ingredients": ["Espresso", "Milk"],
+    "spiceLevel": "Mild",
+    "preparationTime": "5 mins",
+    "price": 5.99,
+    "category": "Drinks"
+  },
+  {
+    "id": 25,
+    "name": "Italian Soda",
+    "shortDetails": "Refreshing sparkling Italian soda.",
+    "ingredients": ["Sparkling Water", "Fruit Syrup"],
+    "spiceLevel": "Mild",
+    "preparationTime": "4 mins",
+    "price": 4.99,
+    "category": "Drinks"
+  },
+  {
+    "id": 26,
+    "name": "Lemon Spritz",
+    "shortDetails": "Citrusy sparkling Italian refresher.",
+    "ingredients": ["Lemon", "Sparkling Water", "Mint"],
+    "spiceLevel": "Mild",
+    "preparationTime": "4 mins",
+    "price": 5.5,
+    "category": "Drinks"
+  },
+  {
+    "id": 27,
+    "name": "Sparkling Water",
+    "shortDetails": "Premium chilled sparkling mineral water.",
+    "ingredients": ["Mineral Water"],
+    "spiceLevel": "Mild",
+    "preparationTime": "2 mins",
+    "price": 2.99,
+    "category": "Drinks"
+  }
+]
