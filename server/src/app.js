@@ -5,6 +5,7 @@ import morgan from "morgan";
 import testRoutes from "./routes/test.routes.js";
 import selectedItemsRoutes from "./routes/selectedItems.routes.js";
 import menuRoutes from "./routes/menu.routes.js";
+import chatRoutes from "./routes/chat.routes.js";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(morgan("dev"));
 app.use("/api/test", testRoutes);
 app.use("/api/selected-items", selectedItemsRoutes);
 app.use("/api/menu", menuRoutes);
+app.use("/api/chat", chatRoutes);
 
 app.get("/", (req, res) => {
   res.json({
