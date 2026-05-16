@@ -23,33 +23,20 @@ import { initialConversation } from "@/data/initialConversation";
 import { useChatApi } from "@/api/hooks/useChatApi";
 import { processChatActions } from "@/utils/processChatActions";
 import { useMenuApi } from "@/api/hooks/useMenuApi";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export default function BistroScreen() {
   const [menuVisible, setMenuVisible] = useState(false);
   const [cartVisible, setCartVisible] = useState(false);
-  const [messages, setMessages] =
-  useState<ChatMessage[]>(
-    initialConversation
-  );
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState<ChatMessage[]>(initialConversation);
 
-  const [input, setInput] =
-    useState("");
-
-  const {
-    loading,
-    sendMessage,
-  } = useChatApi();
-
+  const cart = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch();
-
-  const {
-    menu,
-    getMenu,
-  } = useMenuApi();
-
-  useEffect(() => {
-    getMenu();
-  }, []);
+  
+  const { loading, sendMessage } = useChatApi();
+  const { menu, getMenu } = useMenuApi();
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -69,10 +56,7 @@ export default function BistroScreen() {
     setInput("");
 
     try {
-      const response = await sendMessage(
-        currentInput,
-        []
-      );
+      const response = await sendMessage(currentInput, cart);
 
       processChatActions(
         response.actions,
@@ -106,6 +90,10 @@ export default function BistroScreen() {
       ]);
     }
   };
+
+  useEffect(() => {
+    getMenu();
+  }, []);
 
   return (
     <KeyboardAvoidingView

@@ -1,10 +1,19 @@
 import apiClient from "../client";
 
-export const sendChatMessageRequest =
-  async (
-    message: string,
-    cart: any[]
-  ) => {
+import { CartItem } from "../types/cart";
+import { ChatResponse } from "../types/chat";
+
+interface SendChatMessageParams {
+  message: string;
+  cart: CartItem[];
+}
+
+export const sendChatMessage =
+  async ({
+    message,
+    cart,
+  }: SendChatMessageParams)
+  : Promise<ChatResponse> => {
 
     const response =
       await apiClient.post(
@@ -16,4 +25,4 @@ export const sendChatMessageRequest =
       );
 
     return response.data;
-  };
+};

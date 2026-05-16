@@ -1,11 +1,16 @@
 import { useState } from "react";
 
-import { ChatResponse }
-  from "../types/chat";
+import {
+  ChatResponse,
+} from "../types/chat";
 
 import {
-  sendChatMessageRequest,
+  sendChatMessage,
 } from "../services/chat.service";
+
+import {
+  CartItem,
+} from "../types/cart";
 
 export const useChatApi = () => {
   const [loading, setLoading] =
@@ -13,16 +18,16 @@ export const useChatApi = () => {
 
   const sendMessage = async (
     message: string,
-    cart: any[]
+    cart: CartItem[]
   ): Promise<ChatResponse> => {
     try {
       setLoading(true);
 
       const data =
-        await sendChatMessageRequest(
+        await sendChatMessage({
           message,
-          cart
-        );
+          cart,
+        });
 
       return data;
     } finally {
