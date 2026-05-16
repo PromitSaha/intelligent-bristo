@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": "642d60e4-c5f2-46c1-a54c-3d4c2676f35f",
     "name": "Bruschetta",
     "shortDetails": "Toasted bread topped with tomato basil mixture.",
     "ingredients": ["Bread", "Tomato", "Basil", "Garlic"],
@@ -10,7 +10,7 @@
     "category": "Appetizers"
   },
   {
-    "id": 2,
+    "id": "a65945c8-a9eb-4a52-969c-f007a65c667a",
     "name": "Garlic Bread",
     "shortDetails": "Crispy baked bread with garlic butter.",
     "ingredients": ["Bread", "Garlic", "Butter", "Parsley"],
@@ -20,7 +20,7 @@
     "category": "Appetizers"
   },
   {
-    "id": 3,
+    "id": "1c57ad66-984a-407e-86dc-ac42ab4f200c",
     "name": "Caprese Salad",
     "shortDetails": "Fresh mozzarella, tomato, and basil salad.",
     "ingredients": ["Mozzarella", "Tomato", "Basil", "Olive Oil"],
@@ -30,7 +30,7 @@
     "category": "Appetizers"
   },
   {
-    "id": 4,
+    "id": "dcd30ead-9051-4b34-b865-6924cc22264a",
     "name": "Stuffed Mushrooms",
     "shortDetails": "Mushrooms stuffed with cheese and herbs.",
     "ingredients": ["Mushrooms", "Cheese", "Parsley", "Garlic"],
@@ -40,7 +40,7 @@
     "category": "Appetizers"
   },
   {
-    "id": 5,
+    "id": "a279f8c8-2274-4d95-a53e-8e316c971da5",
     "name": "Margherita Pizza",
     "shortDetails": "Classic Neapolitan pizza with mozzarella and basil.",
     "ingredients": ["Tomato Sauce", "Mozzarella", "Basil", "Olive Oil"],
@@ -50,7 +50,7 @@
     "category": "Pizza"
   },
   {
-    "id": 6,
+    "id": "d4aa7cfe-50ad-4b46-b26e-dfb7c114e33e",
     "name": "Pepperoni Pizza",
     "shortDetails": "Traditional pepperoni pizza with mozzarella.",
     "ingredients": ["Pepperoni", "Mozzarella", "Tomato Sauce"],
@@ -60,7 +60,7 @@
     "category": "Pizza"
   },
   {
-    "id": 7,
+    "id": "100c5726-a250-4958-b33c-410185ac164d",
     "name": "Quattro Formaggi",
     "shortDetails": "Four-cheese Italian white pizza.",
     "ingredients": ["Mozzarella", "Parmesan", "Gorgonzola", "Ricotta"],
@@ -70,7 +70,7 @@
     "category": "Pizza"
   },
   {
-    "id": 8,
+    "id": "b6604fea-c12a-419c-8425-ff34fa696efa",
     "name": "Diavola Pizza",
     "shortDetails": "Spicy Italian salami pizza.",
     "ingredients": ["Salami", "Mozzarella", "Chili Oil"],
@@ -80,7 +80,7 @@
     "category": "Pizza"
   },
   {
-    "id": 9,
+    "id": "f1c28d38-a58b-4972-97e5-383896b575ae",
     "name": "Truffle Pizza",
     "shortDetails": "Creamy truffle pizza with mushrooms.",
     "ingredients": ["Truffle Oil", "Mushrooms", "Mozzarella"],
@@ -90,7 +90,7 @@
     "category": "Pizza"
   },
   {
-    "id": 10,
+    "id": "ae19eebb-1b16-4ce7-8fb4-178e7649b1e9",
     "name": "Chicken Alfredo",
     "shortDetails": "Creamy Alfredo pasta topped with grilled chicken.",
     "ingredients": ["Fettuccine", "Chicken", "Cream", "Parmesan"],
@@ -100,7 +100,7 @@
     "category": "Pasta"
   },
   {
-    "id": 11,
+    "id": "9f23a19d-cfc9-486d-96dd-15c3a02e1edc",
     "name": "Spicy Arrabbiata Pasta",
     "shortDetails": "Penne pasta tossed in spicy garlic tomato sauce.",
     "ingredients": ["Penne", "Garlic", "Tomato", "Chili Flakes"],
@@ -110,7 +110,7 @@
     "category": "Pasta"
   },
   {
-    "id": 12,
+    "id": "954299a2-6b1d-45f6-bcaf-954735346dc1",
     "name": "Carbonara",
     "shortDetails": "Classic Roman pasta with pancetta and parmesan.",
     "ingredients": ["Spaghetti", "Pancetta", "Egg", "Parmesan"],
@@ -120,7 +120,7 @@
     "category": "Pasta"
   },
   {
-    "id": 13,
+    "id": "ea584d9c-e359-4d11-b3fb-de362f4ca901",
     "name": "Pesto Linguine",
     "shortDetails": "Fresh basil pesto tossed with linguine.",
     "ingredients": ["Linguine", "Basil", "Parmesan", "Pine Nuts"],
@@ -130,7 +130,7 @@
     "category": "Pasta"
   },
   {
-    "id": 14,
+    "id": "f57de8d8-4913-4e54-8c73-fa1897e8eb86",
     "name": "Lasagna",
     "shortDetails": "Layered pasta baked with beef and cheese.",
     "ingredients": ["Pasta Sheets", "Beef", "Mozzarella", "Tomato Sauce"],
@@ -140,7 +140,7 @@
     "category": "Pasta"
   },
   {
-    "id": 15,
+    "id": "56162975-4c34-4dc3-a66b-efc930423017",
     "name": "Seafood Pasta",
     "shortDetails": "Mixed seafood pasta in garlic white wine sauce.",
     "ingredients": ["Shrimp", "Mussels", "Garlic", "White Wine"],
@@ -150,7 +150,7 @@
     "category": "Pasta"
   },
   {
-    "id": 16,
+    "id": "37784955-978e-443b-9a86-c9b6b8f88fed",
     "name": "Mushroom Risotto",
     "shortDetails": "Creamy risotto with wild mushrooms.",
     "ingredients": ["Arborio Rice", "Mushrooms", "Parmesan"],
@@ -160,7 +160,7 @@
     "category": "Risotto"
   },
   {
-    "id": 17,
+    "id": "ab546399-223f-4d42-8b6e-3ff94dd5aa77",
     "name": "Saffron Risotto",
     "shortDetails": "Classic saffron-infused risotto.",
     "ingredients": ["Arborio Rice", "Saffron", "Parmesan"],
@@ -170,7 +170,7 @@
     "category": "Risotto"
   },
   {
-    "id": 18,
+    "id": "b9413143-9dc5-4713-a655-6e043bf661fe",
     "name": "Shrimp Risotto",
     "shortDetails": "Creamy risotto topped with grilled shrimp.",
     "ingredients": ["Shrimp", "Arborio Rice", "Garlic", "Parmesan"],
@@ -180,7 +180,7 @@
     "category": "Risotto"
   },
   {
-    "id": 19,
+    "id": "2ef0ca30-d5f0-488e-a39c-ba7b7f73f0d2",
     "name": "Tiramisu",
     "shortDetails": "Classic Italian coffee-flavored layered dessert.",
     "ingredients": ["Mascarpone", "Espresso", "Ladyfingers", "Cocoa"],
@@ -190,7 +190,7 @@
     "category": "Desserts"
   },
   {
-    "id": 20,
+    "id": "2cb7fe2e-2fee-41e3-a4f4-950669930977",
     "name": "Cannoli",
     "shortDetails": "Crispy pastry shells filled with sweet ricotta.",
     "ingredients": ["Ricotta", "Pastry Shell", "Chocolate Chips"],
@@ -200,7 +200,7 @@
     "category": "Desserts"
   },
   {
-    "id": 21,
+    "id": "b2916548-1ba9-43a3-8bc3-582f4c83aba0",
     "name": "Panna Cotta",
     "shortDetails": "Creamy Italian vanilla dessert.",
     "ingredients": ["Cream", "Vanilla", "Gelatin"],
@@ -210,7 +210,7 @@
     "category": "Desserts"
   },
   {
-    "id": 22,
+    "id": "96cf0419-17df-4967-a748-678fb3099138",
     "name": "Gelato",
     "shortDetails": "Authentic Italian-style ice cream.",
     "ingredients": ["Milk", "Sugar", "Vanilla"],
@@ -220,7 +220,7 @@
     "category": "Desserts"
   },
   {
-    "id": 23,
+    "id": "efa1de17-8f16-4f46-9052-197f2a32ff7a",
     "name": "Espresso",
     "shortDetails": "Rich and bold Italian espresso shot.",
     "ingredients": ["Coffee Beans", "Water"],
@@ -230,7 +230,7 @@
     "category": "Drinks"
   },
   {
-    "id": 24,
+    "id": "555ed92e-9a1b-4968-8de7-628c0f94b14d",
     "name": "Cappuccino",
     "shortDetails": "Espresso with steamed milk foam.",
     "ingredients": ["Espresso", "Milk"],
@@ -240,7 +240,7 @@
     "category": "Drinks"
   },
   {
-    "id": 25,
+    "id": "f91231a0-ffc9-4f1b-a1f1-b22a57d1dfcc",
     "name": "Italian Soda",
     "shortDetails": "Refreshing sparkling Italian soda.",
     "ingredients": ["Sparkling Water", "Fruit Syrup"],
@@ -250,7 +250,7 @@
     "category": "Drinks"
   },
   {
-    "id": 26,
+    "id": "a02f3a38-6cf6-4cb7-ac69-09804abb3d72",
     "name": "Lemon Spritz",
     "shortDetails": "Citrusy sparkling Italian refresher.",
     "ingredients": ["Lemon", "Sparkling Water", "Mint"],
@@ -260,7 +260,7 @@
     "category": "Drinks"
   },
   {
-    "id": 27,
+    "id": "9292feb1-3233-4968-a819-e803cbacfdf8",
     "name": "Sparkling Water",
     "shortDetails": "Premium chilled sparkling mineral water.",
     "ingredients": ["Mineral Water"],

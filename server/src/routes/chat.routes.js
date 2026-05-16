@@ -1,9 +1,12 @@
 import express from "express";
 
-import { processChat } from "../controllers/chat.controller.js";
+import {
+  chat,
+} from "../controllers/chat.controller.js";
 
-const router = express.Router();
+const router =
+  express.Router();
 
-router.post("/", processChat);
+router.post("/", chat);
 
 export default router;

@@ -1,50 +1,53 @@
-export const handleChatMessage = (
-  message,
-  cart
-) => {
+import openai
+  from "../lib/openai.js";
 
-  const lower =
-    message.toLowerCase();
+import { buildSystemPrompt }
+  from "../prompts/chat.prompt.js";
 
-  if (
-    lower.includes("burger")
-  ) {
-    return {
-      reply:
-        "Added 2 spicy burgers to your cart.",
+import {
+  getMenuItems,
+} from "./menu.service.js";
 
-      actions: [
-        {
-          type: "ADD_ITEM",
+export const processChatMessage =
+  async ({
+    message,
+    cart,
+  }) => {
 
-          itemId:
-            "550e8400-e29b-41d4-a716-446655440007",
+    const menu =
+      getMenuItems();
 
-          quantity: 2,
+    const completion =
+      await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+
+        response_format: {
+          type: "json_object",
         },
-      ],
-    };
-  }
 
-  if (
-    lower.includes("clear")
-  ) {
-    return {
-      reply:
-        "Your cart has been cleared.",
+        messages: [
+          {
+            role: "system",
 
-      actions: [
-        {
-          type: "CLEAR_CART",
-        },
-      ],
-    };
-  }
+            content:
+              buildSystemPrompt(
+                menu,
+                cart
+              ),
+          },
 
-  return {
-    reply:
-      "I couldn't understand that request.",
+          {
+            role: "user",
+            content: message,
+          },
+        ],
+      });
 
-    actions: [],
-  };
+    const content =
+      completion
+        .choices[0]
+        .message
+        .content;
+
+    return JSON.parse(content);
 };
