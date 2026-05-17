@@ -4,11 +4,21 @@ import { ChatMessage }
 export const initialConversation:
   ChatMessage[] = [
     {
-      id: "welcome_1",
+      id: "welcome",
 
       role: "assistant",
 
       content:
-        "Welcome to Intelligent Bistro.\n\nYou can ask for recommendations, add items naturally, or explore the menu.",
-    },
+      `🍝 Welcome to Intelligent Bistro.
+
+      Tonight’s kitchen is serving handcrafted Italian favorites — from wood-fired pizzas to fresh pasta and antipasti.
+
+      I can help you:
+      • Explore the menu
+      • Recommend dishes
+      • Build your order naturally
+      • Manage your cart conversationally
+
+      What are you craving tonight?`
+    }
   ];
