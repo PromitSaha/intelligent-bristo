@@ -9,7 +9,7 @@ import { store } from "@/store/store";
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export const unstable_settings = {
-  anchor: '(tabs)',
+  anchor: '(bristo)',
 };
 
 export default function RootLayout() {
@@ -18,8 +18,13 @@ export default function RootLayout() {
   return (
     <Provider store={store}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(bistro)" />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            gestureEnabled: false,
+          }}
+        >
+          <Stack.Screen name="(bristo)" />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
