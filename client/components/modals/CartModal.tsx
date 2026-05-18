@@ -9,6 +9,7 @@ import {
   Animated,
   Dimensions,
   ScrollView,
+  Alert,
 } from "react-native";
 
 import { BlurView } from "expo-blur";
@@ -19,8 +20,10 @@ import {
 } from "react-redux";
 
 import { RootState } from "@/store/store";
-import { addItem, removeItem } from "@/store/slices/cartSlice";
+import { addItem, clearCart, removeItem } from "@/store/slices/cartSlice";
 import { COLORS } from "@/constants/colors";
+import { useOrderApi } from "@/api/hooks/useOrderApi";
+import { OrderResponse } from "@/api/types/order";
 
 interface Props {
   visible: boolean;
@@ -41,6 +44,20 @@ export default function CartModal({
     ).current;
 
   const dispatch = useDispatch();
+  const {
+    loading,
+    placeOrder,
+  } = useOrderApi();
+
+  const [
+    confirmedOrder,
+    setConfirmedOrder,
+  ] = React.useState<OrderResponse | null>(null);
+
+  const [
+    currentTime,
+    setCurrentTime,
+  ] = React.useState(Date.now());
 
   const cartItems = useSelector(
     (state: RootState) => state.cart.items
@@ -56,6 +73,68 @@ export default function CartModal({
     },
     0
   );
+
+  const totalKitchenSeconds =
+    confirmedOrder
+      ? confirmedOrder.estimatedKitchenTime * 60
+      : 0;
+
+  const elapsedSeconds =
+    confirmedOrder
+      ? Math.max(
+          0,
+          Math.floor(
+            (
+              currentTime -
+              new Date(confirmedOrder.createdAt).getTime()
+            ) / 1000
+          )
+        )
+      : 0;
+
+  const remainingSeconds =
+    confirmedOrder
+      ? Math.max(
+          totalKitchenSeconds - elapsedSeconds,
+          0
+        )
+      : 0;
+
+  const remainingMinutes =
+    Math.ceil(remainingSeconds / 60);
+
+  const progress =
+    totalKitchenSeconds > 0
+      ? Math.min(
+          elapsedSeconds / totalKitchenSeconds,
+          1
+        )
+      : 0;
+
+  const handlePlaceOrder =
+    async () => {
+      if (cartItems.length === 0) {
+        Alert.alert(
+          "Cart is empty",
+          "Add something delicious before placing your order."
+        );
+
+        return;
+      }
+
+      try {
+        const order =
+          await placeOrder(cartItems);
+
+        setConfirmedOrder(order);
+        dispatch(clearCart());
+      } catch {
+        Alert.alert(
+          "Order failed",
+          "We could not place your order. Please try again."
+        );
+      }
+    };
 
   // useEffect Start Here
   React.useEffect(() => {
@@ -81,7 +160,20 @@ export default function CartModal({
         useNativeDriver: true,
       }).start();
     }
-  }, [visible]);
+  }, [visible, screenWidth, slideAnim]);
+
+  React.useEffect(() => {
+    if (!confirmedOrder) return;
+
+    setCurrentTime(Date.now());
+
+    const intervalId =
+      setInterval(() => {
+        setCurrentTime(Date.now());
+      }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [confirmedOrder]);
   // UseEffect End Here
 
   return (
@@ -105,7 +197,9 @@ export default function CartModal({
           >
             <View style={styles.header}>
               <Text style={styles.title}>
-                Cart
+                {confirmedOrder
+                  ? "Order Status"
+                  : "Cart"}
               </Text>
 
               <TouchableOpacity
@@ -125,7 +219,94 @@ export default function CartModal({
               }}
             >
 
-              {cartItems.length === 0 ? (
+              {confirmedOrder ? (
+
+                <View style={styles.orderStatusCard}>
+                  <Text style={styles.confirmationKicker}>
+                    Order confirmed
+                  </Text>
+
+                  <Text style={styles.confirmationTitle}>
+                    Your kitchen ticket is in.
+                  </Text>
+
+                  <View style={styles.orderMetaRow}>
+                    <Text style={styles.orderMetaLabel}>
+                      Order
+                    </Text>
+
+                    <Text style={styles.orderMetaValue}>
+                      {confirmedOrder.orderId}
+                    </Text>
+                  </View>
+
+                  <View style={styles.progressHeader}>
+                    <Text style={styles.progressLabel}>
+                      Remaining time
+                    </Text>
+
+                    <Text style={styles.progressTime}>
+                      {remainingSeconds === 0
+                        ? "Ready"
+                        : `${remainingMinutes} min`}
+                    </Text>
+                  </View>
+
+                  <View style={styles.progressTrack}>
+                    <View
+                      style={[
+                        styles.progressFill,
+                        {
+                          width: `${progress * 100}%`,
+                        },
+                      ]}
+                    />
+                  </View>
+
+                  <Text style={styles.progressHint}>
+                    Estimated kitchen time:{" "}
+                    {confirmedOrder.estimatedKitchenTime} mins
+                  </Text>
+
+                  <View style={styles.orderItems}>
+                    {confirmedOrder.items.map((cartItem) => (
+                      <View
+                        key={cartItem.item.id}
+                        style={styles.confirmedItemRow}
+                      >
+                        <Text style={styles.confirmedItemName}>
+                          {cartItem.quantity}x{" "}
+                          {cartItem.item.name}
+                        </Text>
+
+                        <Text style={styles.confirmedItemPrice}>
+                          ${cartItem.lineTotal.toFixed(2)}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+
+                  <View style={styles.confirmedTotalRow}>
+                    <Text style={styles.confirmedTotalLabel}>
+                      Total
+                    </Text>
+
+                    <Text style={styles.confirmedTotalPrice}>
+                      ${confirmedOrder.subtotal.toFixed(2)}
+                    </Text>
+                  </View>
+
+                  <TouchableOpacity
+                    style={styles.newOrderButton}
+                    onPress={() => setConfirmedOrder(null)}
+                  >
+                    <Text style={styles.newOrderButtonText}>
+                      Start New Order
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+              ) : cartItems.length === 0 ? (
 
                 <View style={styles.emptyContainer}>
 
@@ -206,7 +387,8 @@ export default function CartModal({
               )}
             </ScrollView>
 
-            <View style={styles.footer}>
+            {!confirmedOrder && (
+              <View style={styles.footer}>
               <View>
                 <Text style={styles.totalLabel}>
                   Total
@@ -218,13 +400,28 @@ export default function CartModal({
               </View>
 
               <TouchableOpacity
-                style={styles.orderButton}
+                style={[
+                  styles.orderButton,
+                  (
+                    loading ||
+                    cartItems.length === 0
+                  ) &&
+                    styles.orderButtonDisabled,
+                ]}
+                onPress={handlePlaceOrder}
+                disabled={
+                  loading ||
+                  cartItems.length === 0
+                }
               >
                 <Text style={styles.orderButtonText}>
-                  Place Order
+                  {loading
+                    ? "Placing..."
+                    : "Place Order"}
                 </Text>
               </TouchableOpacity>
             </View>
+            )}
           </BlurView>
         </Animated.View>
       </View>
@@ -345,6 +542,193 @@ const styles = StyleSheet.create({
     fontSize: 18,
 
     color: COLORS.secondaryText,
+  },
+
+  orderStatusCard: {
+    backgroundColor: "rgba(255,255,255,0.22)",
+
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.3)",
+
+    borderRadius: 24,
+
+    padding: 20,
+  },
+
+  confirmationKicker: {
+    fontSize: 13,
+
+    fontWeight: "700",
+
+    textTransform: "uppercase",
+
+    color: COLORS.accent,
+  },
+
+  confirmationTitle: {
+    marginTop: 8,
+
+    fontSize: 24,
+
+    fontWeight: "700",
+
+    color: COLORS.primaryText,
+  },
+
+  orderMetaRow: {
+    marginTop: 22,
+
+    paddingBottom: 18,
+
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255,255,255,0.35)",
+  },
+
+  orderMetaLabel: {
+    fontSize: 14,
+
+    color: COLORS.secondaryText,
+  },
+
+  orderMetaValue: {
+    marginTop: 6,
+
+    fontSize: 22,
+
+    fontWeight: "700",
+
+    color: COLORS.primaryText,
+  },
+
+  progressHeader: {
+    marginTop: 20,
+
+    flexDirection: "row",
+
+    justifyContent: "space-between",
+
+    alignItems: "center",
+  },
+
+  progressLabel: {
+    fontSize: 15,
+
+    color: COLORS.secondaryText,
+  },
+
+  progressTime: {
+    fontSize: 18,
+
+    fontWeight: "700",
+
+    color: COLORS.primaryText,
+  },
+
+  progressTrack: {
+    marginTop: 12,
+
+    height: 12,
+
+    borderRadius: 6,
+
+    backgroundColor: "rgba(255,255,255,0.4)",
+
+    overflow: "hidden",
+  },
+
+  progressFill: {
+    height: "100%",
+
+    borderRadius: 6,
+
+    backgroundColor: COLORS.accent,
+  },
+
+  progressHint: {
+    marginTop: 10,
+
+    fontSize: 13,
+
+    color: COLORS.secondaryText,
+  },
+
+  orderItems: {
+    marginTop: 24,
+  },
+
+  confirmedItemRow: {
+    flexDirection: "row",
+
+    justifyContent: "space-between",
+
+    gap: 12,
+
+    paddingVertical: 12,
+
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255,255,255,0.28)",
+  },
+
+  confirmedItemName: {
+    flex: 1,
+
+    fontSize: 16,
+
+    fontWeight: "600",
+
+    color: COLORS.primaryText,
+  },
+
+  confirmedItemPrice: {
+    fontSize: 16,
+
+    fontWeight: "700",
+
+    color: COLORS.accent,
+  },
+
+  confirmedTotalRow: {
+    marginTop: 18,
+
+    flexDirection: "row",
+
+    justifyContent: "space-between",
+
+    alignItems: "center",
+  },
+
+  confirmedTotalLabel: {
+    fontSize: 16,
+
+    color: COLORS.secondaryText,
+  },
+
+  confirmedTotalPrice: {
+    fontSize: 22,
+
+    fontWeight: "700",
+
+    color: COLORS.primaryText,
+  },
+
+  newOrderButton: {
+    marginTop: 24,
+
+    alignItems: "center",
+
+    backgroundColor: COLORS.accent,
+
+    paddingVertical: 14,
+
+    borderRadius: 20,
+  },
+
+  newOrderButtonText: {
+    color: "#fff",
+
+    fontSize: 16,
+
+    fontWeight: "700",
   },
 
   cartCard: {
@@ -474,6 +858,10 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
 
     borderRadius: 20,
+  },
+
+  orderButtonDisabled: {
+    opacity: 0.55,
   },
 
   orderButtonText: {
