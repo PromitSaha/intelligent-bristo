@@ -1,17 +1,19 @@
 import apiClient from "../client";
 
 import { CartItem } from "../types/cart";
-import { ChatResponse } from "../types/chat";
+import { ChatMessage, ChatResponse } from "../types/chat";
 
 interface SendChatMessageParams {
   message: string;
   cart: CartItem[];
+  messages: ChatMessage[]
 }
 
 export const sendChatMessage =
   async ({
     message,
     cart,
+    messages
   }: SendChatMessageParams)
   : Promise<ChatResponse> => {
 
@@ -21,6 +23,7 @@ export const sendChatMessage =
         {
           message,
           cart,
+          messages,
         }
       );
 

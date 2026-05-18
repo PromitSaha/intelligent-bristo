@@ -56,7 +56,8 @@ export default function BistroScreen() {
     setInput("");
 
     try {
-      const response = await sendMessage(currentInput, cart);
+      const recentMessages = messages.slice(-10);
+      const response = await sendMessage(currentInput, cart, recentMessages);
 
       processChatActions(
         response.actions,
