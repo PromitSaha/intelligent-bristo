@@ -56,5 +56,31 @@ export const processChatMessage =
         .message
         .content;
 
-    return JSON.parse(content);
+    const response =
+      JSON.parse(content);
+
+    const validMenuItemIds =
+      new Set(
+        menu.map((item) => item.id)
+      );
+
+    return {
+      reply:
+        response.reply || "",
+
+      actions:
+        Array.isArray(response.actions)
+          ? response.actions
+          : [],
+
+      suggestedItems:
+        Array.isArray(response.suggestedItems)
+          ? response.suggestedItems.filter(
+              (suggestedItem) =>
+                validMenuItemIds.has(
+                  suggestedItem.itemId
+                )
+            )
+          : [],
+    };
 };
