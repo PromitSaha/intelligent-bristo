@@ -11,7 +11,6 @@ import {
 
 import { ChatMessage } from "@/api/types/chat";
 import { MenuItem } from "@/api/types/menu";
-import { COLORS } from "@/constants/colors";
 
 interface Props {
   messages: ChatMessage[];
@@ -229,8 +228,10 @@ const styles = StyleSheet.create({
   },
 
   suggestionButton: {
-    backgroundColor: COLORS.accent,
+    backgroundColor: "#1F7A6B",
     borderRadius: 18,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.45)",
     paddingHorizontal: 14,
     paddingVertical: 9,
   },

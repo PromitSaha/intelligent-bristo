@@ -46,6 +46,36 @@ export default function MenuModal({
     (state: RootState) => state.cart.items
   );
 
+  const menuSections =
+    React.useMemo(() => {
+      return menu.reduce<
+        Record<string, typeof menu>
+      >((sections, item) => {
+        if (!sections[item.category]) {
+          sections[item.category] = [];
+        }
+
+        sections[item.category].push(item);
+
+        return sections;
+      }, {});
+    }, [menu]);
+
+  const getCategoryAccent = (
+    category: string
+  ) => {
+    const accents:
+      Record<string, string> = {
+        Appetizers: "#D65A31",
+        Pizza: "#FF8A1F",
+        Pasta: "#1F7A6B",
+        Risotto: "#7C5C2E",
+        Desserts: "#A94E7A",
+      };
+
+    return accents[category] || COLORS.accent;
+  };
+
   const getItemQuantity = (itemId: string) => {
     const cartItem = cartItems.find(
       (item) => item.item.id === itemId
@@ -121,74 +151,118 @@ export default function MenuModal({
             <ScrollView
               showsVerticalScrollIndicator={false}
             >
-              {menu.map((item) => (
-                <View
-                  key={item.id}
-                  style={styles.itemCard}
-                >
-                  <Text style={styles.itemTitle}>
-                    {item.name}
-                  </Text>
-
-                  <Text style={styles.itemDescription}>
-                    {item.shortDetails}
-                  </Text>
-
-                  <Text style={styles.itemMeta}>
-                    🌶 {item.spiceLevel}
-                  </Text>
-
-                  <Text style={styles.itemMeta}>
-                    ⏱ {item.preparationTime}
-                  </Text>
-
-                  <View style={styles.bottomRow}>
-                    <Text style={styles.itemPrice}>
-                      ${item.price.toFixed(2)}
-                    </Text>
-
-                    {getItemQuantity(item.id) === 0 ? (
-
-                      <TouchableOpacity
-                        style={styles.addButton}
-                        onPress={() => dispatch(addItem({item, quantity: 1}))}
-                      >
-                        <Text style={styles.addButtonText}>
-                          Add
-                        </Text>
-                      </TouchableOpacity>
-
-                    ) : (
-
-                      <View style={styles.quantityContainer}>
-
-                        <TouchableOpacity
-                          style={styles.quantityButton}
-                          onPress={() => dispatch(removeItem({itemId: item.id, quantity: 1}))}
-                        >
-                          <Text style={styles.quantityButtonText}>
-                            −
-                          </Text>
-                        </TouchableOpacity>
-
-                        <Text style={styles.quantityText}>
-                          {getItemQuantity(item.id)}
+              {Object.entries(menuSections).map(
+                ([
+                  category,
+                  items,
+                ]) => (
+                  <View
+                    key={category}
+                    style={[
+                      styles.menuSection,
+                      {
+                        borderLeftColor:
+                          getCategoryAccent(category),
+                      },
+                    ]}
+                  >
+                    <View style={styles.sectionHeader}>
+                      <View>
+                        <Text style={styles.sectionEyebrow}>
+                          Chef selection
                         </Text>
 
-                        <TouchableOpacity
-                          style={styles.quantityButton}
-                          onPress={() => dispatch(addItem({item, quantity: 1}))}
-                        >
-                          <Text style={styles.quantityButtonText}>
-                            +
-                          </Text>
-                        </TouchableOpacity>
-
+                        <Text style={styles.sectionTitle}>
+                          {category}
+                        </Text>
                       </View>
-                    )}
+
+                      <View
+                        style={[
+                          styles.sectionBadge,
+                          {
+                            backgroundColor:
+                              getCategoryAccent(category),
+                          },
+                        ]}
+                      >
+                        <Text style={styles.sectionBadgeText}>
+                          {items.length}
+                        </Text>
+                      </View>
                     </View>
-                </View>
-              ))}
+
+                    {items.map((item) => (
+                      <View
+                        key={item.id}
+                        style={styles.itemCard}
+                      >
+                        <Text style={styles.itemTitle}>
+                          {item.name}
+                        </Text>
+
+                        <Text style={styles.itemDescription}>
+                          {item.shortDetails}
+                        </Text>
+
+                        <Text style={styles.itemMeta}>
+                          🌶 {item.spiceLevel}
+                        </Text>
+
+                        <Text style={styles.itemMeta}>
+                          ⏱ {item.preparationTime}
+                        </Text>
+
+                        <View style={styles.bottomRow}>
+                          <Text style={styles.itemPrice}>
+                            ${item.price.toFixed(2)}
+                          </Text>
+
+                          {getItemQuantity(item.id) === 0 ? (
+
+                            <TouchableOpacity
+                              style={styles.addButton}
+                              onPress={() => dispatch(addItem({item, quantity: 1}))}
+                            >
+                              <Text style={styles.addButtonText}>
+                                Add
+                              </Text>
+                            </TouchableOpacity>
+
+                          ) : (
+
+                            <View style={styles.quantityContainer}>
+
+                              <TouchableOpacity
+                                style={styles.quantityButton}
+                                onPress={() => dispatch(removeItem({itemId: item.id, quantity: 1}))}
+                              >
+                                <Text style={styles.quantityButtonText}>
+                                  −
+                                </Text>
+                              </TouchableOpacity>
+
+                              <Text style={styles.quantityText}>
+                                {getItemQuantity(item.id)}
+                              </Text>
+
+                              <TouchableOpacity
+                                style={styles.quantityButton}
+                                onPress={() => dispatch(addItem({item, quantity: 1}))}
+                              >
+                                <Text style={styles.quantityButtonText}>
+                                  +
+                                </Text>
+                              </TouchableOpacity>
+
+                            </View>
+                          )}
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                )
+              )}
             </ScrollView>
               </BlurView>
             </Animated.View>
@@ -281,18 +355,88 @@ const styles = StyleSheet.create({
     color: COLORS.primaryText,
   },
 
+  menuSection: {
+    marginBottom: 28,
+
+    padding: 14,
+
+    borderRadius: 24,
+
+    borderLeftWidth: 5,
+
+    backgroundColor: "rgba(255,255,255,0.16)",
+
+    borderTopWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+
+    borderTopColor: "rgba(255,255,255,0.24)",
+    borderRightColor: "rgba(255,255,255,0.24)",
+    borderBottomColor: "rgba(255,255,255,0.24)",
+  },
+
+  sectionHeader: {
+    marginBottom: 16,
+
+    flexDirection: "row",
+
+    justifyContent: "space-between",
+
+    alignItems: "center",
+  },
+
+  sectionEyebrow: {
+    marginBottom: 4,
+
+    fontSize: 11,
+
+    fontWeight: "700",
+
+    letterSpacing: 0.6,
+
+    textTransform: "uppercase",
+
+    color: COLORS.secondaryText,
+  },
+
+  sectionTitle: {
+    fontSize: 22,
+
+    fontWeight: "700",
+
+    color: COLORS.primaryText,
+  },
+
+  sectionBadge: {
+    minWidth: 38,
+    height: 38,
+
+    borderRadius: 19,
+
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  sectionBadgeText: {
+    color: "#fff",
+
+    fontSize: 15,
+
+    fontWeight: "700",
+  },
+
   itemCard: {
     padding: 18,
 
-    borderRadius: 20,
+    borderRadius: 18,
 
-    marginBottom: 16,
+    marginBottom: 12,
 
-    backgroundColor: "rgba(255,255,255,0.18)",
+    backgroundColor: "rgba(255,255,255,0.22)",
 
     borderWidth: 1,
 
-    borderColor: "rgba(255,255,255,0.2)",
+    borderColor: "rgba(255,255,255,0.26)",
   },
 
   itemText: {

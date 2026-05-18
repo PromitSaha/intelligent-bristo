@@ -38,6 +38,13 @@ export default function BistroScreen() {
 
   const cart = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch();
+
+  const cartItemCount =
+    cart.reduce(
+      (total, cartItem) =>
+        total + cartItem.quantity,
+      0
+    );
   
   const { loading, sendMessage } = useChatApi();
   const { menu, getMenu } = useMenuApi();
@@ -142,6 +149,15 @@ export default function BistroScreen() {
             onPress={() => setCartVisible(true)}
           >
             <Text style={styles.buttonText}>🛒</Text>
+            {cartItemCount > 0 && (
+              <View style={styles.cartBadge}>
+                <Text style={styles.cartBadgeText}>
+                  {cartItemCount > 99
+                    ? "99+"
+                    : cartItemCount}
+                </Text>
+              </View>
+            )}
           </TouchableOpacity>
 
         </View>
@@ -211,9 +227,40 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
     borderColor: COLORS.border,
+
+    position: "relative",
   },
 
   buttonText: {
     fontSize: 18,
+  },
+
+  cartBadge: {
+    position: "absolute",
+    top: -6,
+    right: -6,
+
+    minWidth: 22,
+    height: 22,
+
+    borderRadius: 11,
+
+    paddingHorizontal: 6,
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    backgroundColor: COLORS.accent,
+
+    borderWidth: 2,
+    borderColor: COLORS.background,
+  },
+
+  cartBadgeText: {
+    color: "#fff",
+
+    fontSize: 11,
+
+    fontWeight: "700",
   },
 });
