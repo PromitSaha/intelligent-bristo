@@ -4,6 +4,8 @@ export interface ChatMessage {
   role: "user" | "assistant";
 
   content: string;
+
+  suggestedItems?: ChatSuggestedItem[];
 }
 
 export interface ChatAction {
@@ -21,4 +23,10 @@ export interface ChatResponse {
   reply: string;
 
   actions: ChatAction[];
+
+  suggestedItems?: ChatSuggestedItem[];
+}
+
+export interface ChatSuggestedItem {
+  itemId: string;
 }

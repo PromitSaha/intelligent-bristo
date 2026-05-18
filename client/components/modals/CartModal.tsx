@@ -174,6 +174,15 @@ export default function CartModal({
 
     return () => clearInterval(intervalId);
   }, [confirmedOrder]);
+
+  React.useEffect(() => {
+    if (
+      confirmedOrder &&
+      cartItems.length > 0
+    ) {
+      setConfirmedOrder(null);
+    }
+  }, [cartItems.length, confirmedOrder]);
   // UseEffect End Here
 
   return (
@@ -182,19 +191,19 @@ export default function CartModal({
       transparent
       animationType="none"
     >
-      <View style={styles.overlay}>
-        <Animated.View
-          style={{
-            transform: [
-              { translateX: slideAnim }
-            ],
-          }}
-        >
-          <BlurView
-            intensity={40}
-            tint="light"
-            style={styles.modal}
-          >
+        <View style={styles.overlay}>
+            <Animated.View
+              style={{
+                transform: [
+                  { translateX: slideAnim }
+                ],
+              }}
+            >
+              <BlurView
+                intensity={40}
+                tint="light"
+                style={styles.modal}
+              >
             <View style={styles.header}>
               <Text style={styles.title}>
                 {confirmedOrder
@@ -422,9 +431,9 @@ export default function CartModal({
               </TouchableOpacity>
             </View>
             )}
-          </BlurView>
-        </Animated.View>
-      </View>
+              </BlurView>
+            </Animated.View>
+        </View>
     </Modal>
   );
 }

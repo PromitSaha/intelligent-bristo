@@ -1,4 +1,7 @@
-import { useState } from "react";
+import {
+  useCallback,
+  useState,
+} from "react";
 
 import { getMenuRequest }
 from "../services/menu.service";
@@ -13,7 +16,7 @@ export const useMenuApi = () => {
   const [menu, setMenu] =
     useState<MenuItem[]>([]);
 
-  const getMenu = async () => {
+  const getMenu = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getMenuRequest();
@@ -23,7 +26,7 @@ export const useMenuApi = () => {
     } finally {
         setLoading(false);
     }
-  };
+  }, []);
 
   return {
     menu,

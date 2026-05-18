@@ -5,22 +5,53 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Keyboard
+  Keyboard,
+  TouchableOpacity,
 } from "react-native";
 
 import { ChatMessage } from "@/api/types/chat";
+import { MenuItem } from "@/api/types/menu";
+import { COLORS } from "@/constants/colors";
 
 interface Props {
   messages: ChatMessage[];
   loading: boolean;
+  menu: MenuItem[];
+  onSuggestionPress: (
+    item: MenuItem
+  ) => void;
 }
 
 export default function ConversationList({
   messages,
   loading,
+  menu,
+  onSuggestionPress,
 }: Props) {
 
   const scrollViewRef = useRef<ScrollView>(null);
+
+  const getSuggestedItems = (
+    message: ChatMessage
+  ) => {
+    if (
+      message.role !== "assistant" ||
+      !message.suggestedItems?.length
+    ) {
+      return [];
+    }
+
+    return message.suggestedItems
+      .map((suggestedItem) =>
+        menu.find(
+          (item) =>
+            item.id === suggestedItem.itemId
+        )
+      )
+      .filter((item): item is MenuItem =>
+        Boolean(item)
+      );
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -57,37 +88,60 @@ export default function ConversationList({
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      {messages.map((message) => (
-        <View
-          key={message.id}
-          style={[
-            styles.messageWrapper,
-            message.role === "user"
-              ? styles.userWrapper
-              : styles.assistantWrapper,
-          ]}
-        >
+      {messages.map((message) => {
+        const suggestedItems =
+          getSuggestedItems(message);
+
+        return (
           <View
+            key={message.id}
             style={[
-              styles.bubble,
+              styles.messageWrapper,
               message.role === "user"
-                ? styles.userBubble
-                : styles.assistantBubble,
+                ? styles.userWrapper
+                : styles.assistantWrapper,
             ]}
           >
-            <Text
+            <View
               style={[
-                styles.messageText,
+                styles.bubble,
                 message.role === "user"
-                  ? styles.userText
-                  : styles.assistantText,
+                  ? styles.userBubble
+                  : styles.assistantBubble,
               ]}
             >
-              {message.content}
-            </Text>
+              <Text
+                style={[
+                  styles.messageText,
+                  message.role === "user"
+                    ? styles.userText
+                    : styles.assistantText,
+                ]}
+              >
+                {message.content}
+              </Text>
+            </View>
+
+            {suggestedItems.length > 0 && (
+              <View style={styles.suggestions}>
+                {suggestedItems.map((item) => (
+                  <TouchableOpacity
+                    key={item.id}
+                    style={styles.suggestionButton}
+                    onPress={() =>
+                      onSuggestionPress(item)
+                    }
+                  >
+                    <Text style={styles.suggestionText}>
+                      {item.name}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
           </View>
-        </View>
-      ))}
+        );
+      })}
       {loading && (
         <View
           style={styles.assistantWrapper}
@@ -164,5 +218,26 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: "#666",
     letterSpacing: 4,
+  },
+
+  suggestions: {
+    marginTop: 10,
+    maxWidth: "88%",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+
+  suggestionButton: {
+    backgroundColor: COLORS.accent,
+    borderRadius: 18,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+  },
+
+  suggestionText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "700",
   },
 });

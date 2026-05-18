@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import {
+  useDispatch,
+  useSelector,
+} from "react-redux";
 
 import {
   View,
@@ -23,8 +26,9 @@ import { initialConversation } from "@/data/initialConversation";
 import { useChatApi } from "@/api/hooks/useChatApi";
 import { processChatActions } from "@/utils/processChatActions";
 import { useMenuApi } from "@/api/hooks/useMenuApi";
-import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { MenuItem } from "@/api/types/menu";
+import { addItem } from "@/store/slices/cartSlice";
 
 export default function BistroScreen() {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -70,13 +74,15 @@ export default function BistroScreen() {
         id: `${Date.now()}_assistant`,
         role: "assistant",
         content: response.reply,
+        suggestedItems:
+          response.suggestedItems || [],
       };
 
       setMessages((prev) => [
         ...prev,
         assistantMessage,
       ]);
-    } catch (error) {
+    } catch {
       const errorMessage:
       ChatMessage = {
         id: `${Date.now()}_error`,
@@ -92,9 +98,22 @@ export default function BistroScreen() {
     }
   };
 
+  const handleSuggestionPress = (
+    item: MenuItem
+  ) => {
+    dispatch(
+      addItem({
+        item,
+        quantity: 1,
+      })
+    );
+
+    setCartVisible(true);
+  };
+
   useEffect(() => {
     getMenu();
-  }, []);
+  }, [getMenu]);
 
   return (
     <KeyboardAvoidingView
@@ -130,6 +149,8 @@ export default function BistroScreen() {
         <ConversationList
           messages={messages}
           loading={loading}
+          menu={menu}
+          onSuggestionPress={handleSuggestionPress}
         />
 
         <ChatInput

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BlurView } from "expo-blur";
 
@@ -30,7 +30,6 @@ export default function MenuModal({
 }: Props) {
   const {
     menu,
-    loading,
     getMenu,
   } = useMenuApi();
 
@@ -77,13 +76,13 @@ export default function MenuModal({
         useNativeDriver: true,
       }).start();
     }
-  }, [visible]);
+  }, [visible, screenWidth, slideAnim]);
 
   React.useEffect(() => {
     if (visible) {
       getMenu();
     }
-  }, [visible]);
+  }, [visible, getMenu]);
   // UseEffects end Here
 
   return (
@@ -92,18 +91,18 @@ export default function MenuModal({
       transparent
       animationType="none"
     >
-      <View style={styles.overlay}>
-        <Animated.View
-          style={{
-            transform: [
-              { translateX: slideAnim }
-            ],
-          }}
-        >
-          <BlurView
-            intensity={40}
-            tint="light"
-            style={styles.modal}
+        <View style={styles.overlay}>
+            <Animated.View
+              style={{
+                transform: [
+                  { translateX: slideAnim }
+                ],
+              }}
+            >
+              <BlurView
+                intensity={40}
+                tint="light"
+                style={styles.modal}
           >
             <View style={styles.header}>
               <Text style={styles.title}>
@@ -191,9 +190,9 @@ export default function MenuModal({
                 </View>
               ))}
             </ScrollView>
-          </BlurView>
-        </Animated.View>
-      </View>
+              </BlurView>
+            </Animated.View>
+        </View>
     </Modal>
   );
 }
