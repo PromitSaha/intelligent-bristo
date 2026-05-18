@@ -8,11 +8,13 @@ export const chat =
       const {
         message,
         cart,
+        messages
       } = req.body;
 
       const response = await processChatMessage({
         message,
         cart,
+        messages
       });
 
       res.status(200).json(response);

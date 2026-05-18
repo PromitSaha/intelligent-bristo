@@ -12,10 +12,32 @@ export const processChatMessage =
   async ({
     message,
     cart,
+    messages
   }) => {
-
     const menu =
       getMenuItems();
+      
+    const openAIMessages = [
+      {
+        role: "system",
+
+        content:
+          buildSystemPrompt(
+            menu,
+            cart
+          ),
+      },
+
+      ...messages.map((msg) => ({
+        role: msg.role,
+        content: msg.content,
+      })),
+
+      {
+        role: "user",
+        content: message,
+      },
+    ];
 
     const completion =
       await openai.chat.completions.create({
@@ -25,22 +47,7 @@ export const processChatMessage =
           type: "json_object",
         },
 
-        messages: [
-          {
-            role: "system",
-
-            content:
-              buildSystemPrompt(
-                menu,
-                cart
-              ),
-          },
-
-          {
-            role: "user",
-            content: message,
-          },
-        ],
+        messages: openAIMessages,
       });
 
     const content =
