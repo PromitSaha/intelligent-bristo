@@ -7,6 +7,7 @@ import {
   ScrollView,
   Keyboard,
   TouchableOpacity,
+  Animated,
 } from "react-native";
 
 import { ChatMessage } from "@/api/types/chat";
@@ -29,6 +30,8 @@ export default function ConversationList({
 }: Props) {
 
   const scrollViewRef = useRef<ScrollView>(null);
+  const pulseAnim =
+    useRef(new Animated.Value(0)).current;
 
   const getSuggestedItems = (
     message: ChatMessage
@@ -79,6 +82,47 @@ export default function ConversationList({
       keyboardListener.remove();
     };
   }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      pulseAnim.stopAnimation();
+      pulseAnim.setValue(0);
+
+      return;
+    }
+
+    const animation =
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(pulseAnim, {
+            toValue: 1,
+            duration: 700,
+            useNativeDriver: true,
+          }),
+          Animated.timing(pulseAnim, {
+            toValue: 0,
+            duration: 700,
+            useNativeDriver: true,
+          }),
+        ])
+      );
+
+    animation.start();
+
+    return () => animation.stop();
+  }, [loading, pulseAnim]);
+
+  const dotOpacity =
+    pulseAnim.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0.35, 1],
+    });
+
+  const dotScale =
+    pulseAnim.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0.85, 1.15],
+    });
 
   return (
     <ScrollView
@@ -149,11 +193,27 @@ export default function ConversationList({
             style={[
               styles.bubble,
               styles.assistantBubble,
+              styles.loadingBubble,
             ]}
           >
-            <Text style={styles.typing}>
-              ...
-            </Text>
+            <View style={styles.loadingDots}>
+              {[0, 1, 2].map((dot) => (
+                <Animated.View
+                  key={dot}
+                  style={[
+                    styles.loadingDot,
+                    {
+                      opacity: dotOpacity,
+                      transform: [
+                        {
+                          scale: dotScale,
+                        },
+                      ],
+                    },
+                  ]}
+                />
+              ))}
+            </View>
           </View>
         </View>
       )}
@@ -213,10 +273,37 @@ const styles = StyleSheet.create({
     color: "#ffffff",
   },
 
-  typing: {
-    fontSize: 28,
-    color: "#666",
-    letterSpacing: 4,
+  loadingBubble: {
+    maxWidth: "86%",
+
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    gap: 12,
+  },
+
+  loadingDots: {
+    flexDirection: "row",
+
+    gap: 5,
+  },
+
+  loadingDot: {
+    width: 7,
+    height: 7,
+
+    borderRadius: 4,
+
+    backgroundColor: "#1F7A6B",
+  },
+
+  loadingText: {
+    fontSize: 15,
+
+    fontWeight: "600",
+
+    color: "#3E4A45",
   },
 
   suggestions: {
