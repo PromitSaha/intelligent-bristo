@@ -1,51 +1,131 @@
-# intelligent-bristo
-# Welcome to your Expo app 👋
+# Intelligent Bristo
+Intelligent Bistro is an AI-powered restaurant ordering application built with React Native (Expo), Redux, Node.js, and OpenAI APIs. The app provides a conversational food ordering experience where users can explore the menu, receive intelligent recommendations, manage their cart through natural language, and place orders with real-time preparation tracking.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+The system combines a modern chat-based UI with structured backend actions to create a realistic restaurant workflow simulation, including cart management, kitchen preparation estimation, parallel chef scheduling, and live order progress updates.
 
-## Get started
+# Installation
 
-1. Install dependencies
+This project is divided into two separate applications:
 
-   ```bash
-   npm install
-   ```
+- `client/` → React Native Expo frontend
+- `server/` → Node.js Express backend
 
-2. Start the app
+Both directories require their own dependencies to be installed.
 
-   ```bash
-   npx expo start
-   ```
+## Install Backend Dependencies
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Navigate to the `server` directory and install the required packages:
 
 ```bash
-npm run reset-project
+cd server
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+This will install dependencies such as:
 
-## Learn more
+- Express
+- OpenAI SDK
+- Nodemon
+- Dotenv
+- Cors
 
-To learn more about developing your project with Expo, look at the following resources:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Install Frontend Dependencies
 
-## Join the community
+Navigate to the `client` directory and install the required packages:
 
-Join our community of developers creating universal apps.
+```bash
+cd client
+npm install
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+This will install dependencies such as:
+
+- Expo
+- React Native
+- Redux Toolkit
+- React Redux
+- Axios
+- Expo Router
+
+# Environment Variables Setup
+
+This project uses separate environment variables for the frontend and backend applications.
+
+
+## Frontend Environment Variables
+
+Create a `.env` file inside the `client/` directory.
+
+#### Path
+
+```txt
+client/.env
+```
+
+#### Contents
+
+```env
+EXPO_PUBLIC_API_URL=your_machines_local_IP_address
+```
+This IP address is required if you want to test the application using an iOS device.
+
+## Backend Environment Variables
+
+Create a `.env` file inside the `server/` directory.
+
+#### Path
+
+```txt
+server/.env
+```
+
+#### Contents
+
+```env
+PORT=3000
+OPENAI_API_KEY=your_openai_api_key
+```
+
+---
+
+## Important Notes
+
+- Replace the API URL with your machine's local IP address.
+- The frontend device/emulator and backend server must be connected to the same network.
+- Never commit `.env` files to GitHub.
+- Restart the frontend server after changing frontend environment variables:
+
+```bash
+npx expo start --clear
+```
+
+- Restart the backend server after changing backend environment variables.
+
+# Running the Applications
+
+### Start Backend Server
+
+```bash
+cd server
+npm run dev
+```
+
+---
+
+### Start Frontend App
+
+```bash
+cd client
+npx expo start --clear
+```
+
+---
+
+# Recommended Setup Order
+
+1. Create `.env` files for both `client` and `server`
+2. Install backend dependencies
+3. Install frontend dependencies
+4. Start backend server
+5. Start Expo frontend app
